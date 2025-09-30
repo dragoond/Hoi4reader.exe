@@ -194,7 +194,8 @@ def extract_data():
             'Civilian factories', 'Military factories',
             'Naval factories', 'Equipment operational cost',
             'Productivity', 'Debt', 'Interest rate', 'Globalism',
-            'Investments', 'Bonds held', 'Development Index','Refugees accepted'
+            'Investments', 'Bonds held','Bonds owed', 'Development Index','Refugees accepted','land doctrine','land doctrine','Air doctrine','Corporate tax rate',
+            'Population tax rate'
         ]
 
         # Форматирование заголовков с переносом текста
@@ -224,8 +225,15 @@ def extract_data():
             'Globalism': 8,
             'Investments': 10,
             'Bonds held': 10,
+            'Bonds owed': 10,
             'Development Index': 11,
-            'Refugees accepted': 10
+            'Refugees accepted': 10,
+            'land doctrine': 10,
+            'Air doctrine': 10,
+            'Navy doctrine': 10,
+            'Corporate tax rate': 10,
+            'Population tax rate': 10
+
 
         }
 
@@ -273,12 +281,28 @@ def extract_data():
                                 elif re.search(r"imp_total_bonds_held=([0-9.,]+)", next_line):
                                     value_bonds_held = float(
                                         re.search(r"imp_total_bonds_held=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"imp_total_bonds_owed=([0-9.,]+)", next_line):
+                                    value_bonds_owed = float(
+                                        re.search(r"imp_total_bonds_owed=([0-9.,]+)", next_line).group(1))
+
                                 elif re.search(r"int_investments=([0-9.,]+)", next_line):
                                     value_int_investments = float(
                                         re.search(r"int_investments=([0-9.,]+)", next_line).group(1))
                                 elif re.search(r"interest_rate=([0-9.,]+)", next_line):
                                     value_interest_rate = float(
                                         re.search(r"interest_rate=([0-9.,]+)", next_line).group(1))
+
+                                elif re.search(r"air_doctrines_researched=([0-9.,]+)", next_line):
+                                    value_air_doctrines_researched= float(
+                                        re.search(r"air_doctrines_researched=([0-9.,]+)", next_line).group(1))
+
+                                elif re.search(r"land_doctrine_level=([0-9.,]+)", next_line):
+                                    value_land_doctrine_level= float(
+                                        re.search(r"land_doctrine_level=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"navy_doctrines_researched=([0-9.,]+)", next_line):
+                                    value_navy_doctrines_researched=float(
+                                        re.search(r"navy_doctrines_researched=([0-9.,]+)", next_line).group(1))
+
                                 elif re.search(r"effective_civilian_factories=([0-9.,]+)", next_line):
                                     value_effective_civilian_factories = float(
                                         re.search(r"effective_civilian_factories=([0-9.,]+)", next_line).group(1))
@@ -302,6 +326,13 @@ def extract_data():
                                 elif re.search(r"overall_productivity=([0-9.,]+)", next_line):
                                     value_overall_productivity = float(
                                         re.search(r"overall_productivity=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"corporate_tax_rate=([0-9.,]+)", next_line):
+                                    value_corporate_tax_rate = float(
+                                        re.search(r"corporate_tax_rate=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"population_tax_rate=([0-9.,]+)", next_line):
+                                    value_population_tax_rate = float(
+                                        re.search(r"population_tax_rate=([0-9.,]+)", next_line).group(1))
+
                                     break
 
             if value_gdp is not None:
@@ -325,11 +356,17 @@ def extract_data():
                                 round(value_overall_productivity) if value_overall_productivity is not None else 0)
                 worksheet.write(row, 9, round(value_debt) if value_debt is not None else 0)
                 worksheet.write(row, 10, round(value_interest_rate, 1) if value_interest_rate is not None else 0)
-                worksheet.write(row, 11, value_globalism if value_globalism is not None else 0)
+                worksheet.write(row, 11, round(value_globalism) if value_globalism is not None else 0)
                 worksheet.write(row, 12, round(value_int_investments) if value_int_investments is not None else 0)
                 worksheet.write(row, 13, round(value_bonds_held) if value_bonds_held is not None else 0)
-                worksheet.write(row, 14, value_imp_idi if value_imp_idi is not None else 0)
-                worksheet.write(row, 15, value_refugees_taken_k * 1000 if value_refugees_taken_k is not None else 0)
+                worksheet.write(row, 14, round(value_bonds_owed) if value_bonds_owed is not None else 0)
+                worksheet.write(row, 15, value_imp_idi if value_imp_idi is not None else 0)
+                worksheet.write(row, 16, value_refugees_taken_k * 1000 if value_refugees_taken_k is not None else 0)
+                worksheet.write(row, 17, value_land_doctrine_level if value_land_doctrine_level is not None else 0)
+                worksheet.write(row, 18, value_air_doctrines_researched if value_air_doctrines_researched is not None else 0)
+                worksheet.write(row, 19, value_navy_doctrines_researched if value_navy_doctrines_researched is not None else 0)
+                worksheet.write(row, 20, value_corporate_tax_rate if value_corporate_tax_rate is not None else 0)
+                worksheet.write(row, 21, value_population_tax_rate if value_population_tax_rate is not None else 0)
 
                 row += 1
                 log_message(f"✓ Data extracted for {TAG_value}")
