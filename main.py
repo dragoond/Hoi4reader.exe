@@ -194,7 +194,7 @@ def extract_data():
             'Civilian factories', 'Military factories',
             'Naval factories', 'Equipment operational cost',
             'Productivity', 'Debt', 'Interest rate', 'Globalism',
-            'Investments', 'Bonds held'
+            'Investments', 'Bonds held', 'Development Index','Refugees accepted'
         ]
 
         # Форматирование заголовков с переносом текста
@@ -210,9 +210,9 @@ def extract_data():
 
         # Устанавливаем ширину колонок (можно настроить под ваши нужды)
         column_widths = {
-            'Tag Name': 8,
-            'Name': 12,
-            'GDP': 10,
+            'Tag Name': 6,
+            'Name': 6,
+            'GDP': 6,
             'GDP p/c': 8,
             'Civilian factories': 10,
             'Military factories': 10,
@@ -223,7 +223,10 @@ def extract_data():
             'Interest rate': 10,
             'Globalism': 8,
             'Investments': 10,
-            'Bonds held': 10
+            'Bonds held': 10,
+            'Development Index': 11,
+            'Refugees accepted': 10
+
         }
 
         for col, header in enumerate(headers):
@@ -260,6 +263,13 @@ def extract_data():
                             for next_line_num, next_line in enumerate(lines[line_num + 1:], line_num + 2):
                                 if re.search(r"debt=([0-9.,]+)", next_line):
                                     value_debt = float(re.search(r"debt=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"imp_refugees_taken_k=([0-9.,]+)", next_line):
+                                    value_refugees_taken_k= float(
+                                        re.search(r"imp_refugees_taken_k=([0-9.,]+)", next_line).group(1))
+                                elif re.search(r"imp_idi=([0-9.,]+)", next_line):
+                                    value_imp_idi= float(
+                                        re.search(r"imp_idi=([0-9.,]+)", next_line).group(1))
+
                                 elif re.search(r"imp_total_bonds_held=([0-9.,]+)", next_line):
                                     value_bonds_held = float(
                                         re.search(r"imp_total_bonds_held=([0-9.,]+)", next_line).group(1))
@@ -318,6 +328,9 @@ def extract_data():
                 worksheet.write(row, 11, value_globalism if value_globalism is not None else 0)
                 worksheet.write(row, 12, round(value_int_investments) if value_int_investments is not None else 0)
                 worksheet.write(row, 13, round(value_bonds_held) if value_bonds_held is not None else 0)
+                worksheet.write(row, 14, value_imp_idi if value_imp_idi is not None else 0)
+                worksheet.write(row, 15, value_refugees_taken_k * 1000 if value_refugees_taken_k is not None else 0)
+
                 row += 1
                 log_message(f"✓ Data extracted for {TAG_value}")
             else:
