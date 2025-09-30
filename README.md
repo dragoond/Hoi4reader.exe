@@ -1,4 +1,4 @@
-The program scans the HoI4 MD file. 
+The program scans the HoI4 MD file and creates Excel output file with the found data
 
 The file must be unencrypted. Open 'Documents\Paradox Interactive\Hearts of Iron IV\settings.txt' with a text editor and change 'save_as_binary=yes' to 'save_as_binary=no'.
 
